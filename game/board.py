@@ -1,34 +1,21 @@
 class Board:
     def __init__(self):
-        self.board = [[" " for _ in range(3)] for _ in range(3)]
+        """Initialize a 3x3 tic-tac-toe board."""
+        self.board = [" "] * 9
 
     def display(self):
-        for row in self.board:
-            print("|".join(row))
-            print("-" * 5)
+        """Display the current state of the board."""
+        print("\n")
+        for row in range(3):
+            print(" | ".join(self.board[row * 3:(row + 1) * 3]))
+            if row < 2:
+                print("-" * 5)
+        print("\n")
 
-    def update_board(self, row, col, symbol):
-        if self.board[row][col] == " ":
-            self.board[row][col] = symbol
-            return True
-        return False
+    def update(self, position, marker):
+        """Update the board with the player's marker."""
+        self.board[position] = marker
 
     def is_full(self):
-        return all(cell != " " for row in self.board for cell in row)
-
-    def check_winner(self):
-        for row in self.board:
-            if row[0] == row[1] == row[2] != " ":
-                return row[0]
-
-        for col in range(3):
-            if self.board[0][col] == self.board[1][col] == self.board[2][col] != " ":
-                return self.board[0][col]
-
-        if self.board[0][0] == self.board[1][1] == self.board[2][2] != " ":
-            return self.board[0][0]
-
-        if self.board[0][2] == self.board[1][1] == self.board[2][0] != " ":
-            return self.board[0][2]
-
-        return None
+        """Check if the board is full."""
+        return " " not in self.board

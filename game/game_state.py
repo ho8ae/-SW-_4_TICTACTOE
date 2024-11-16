@@ -1,19 +1,22 @@
-from .board import Board
-from .player import Player
-
 class GameState:
-    def __init__(self, player1, player2):
-        self.board = Board()
-        self.player1 = player1
-        self.player2 = player2
-        self.current_player = player1
+    def __init__(self, board):
+        """Initialize the game state with a Board object."""
+        self.board = board
 
-    def switch_player(self):
-        self.current_player = self.player1 if self.current_player == self.player2 else self.player2
+    def check_winner(self):
+        """Check if there's a winner."""
+        win_positions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+            [0, 4, 8], [2, 4, 6]              # Diagonals
+        ]
 
-    def play_turn(self, row, col):
-        if self.board.update_board(row, col, self.current_player.symbol):
-            winner = self.board.check_winner()
-            self.switch_player()
-            return winner
+        for line in win_positions:
+            b = self.board.board  # Access the Board's internal list
+            if b[line[0]] == b[line[1]] == b[line[2]] and b[line[0]] != " ":
+                return b[line[0]]  # Return the winner's marker
         return None
+
+    def is_draw(self):
+        """Check if the game is a draw."""
+        return self.board.is_full() and self.check_winner() is None
